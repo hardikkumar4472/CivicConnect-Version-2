@@ -1,0 +1,20 @@
+import express from 'express';
+import { reportIssue, getMyIssues, getSectorIssues, addComment  } from '../controllers/issueController.js';
+import authCitizen from '../middleware/authCitizen.js';
+import authSectorHead from '../middleware/authSectorHead.js';
+import { forceCloseIssue } from '../controllers/issueController.js';
+import { exportIssues } from '../controllers/issueController.js';
+import { protect } from '../middleware/auth.js';
+import { getCitizenIssues } from '../controllers/issueController.js';
+import { updateIssueStatus } from '../controllers/issueController.js';
+
+const router = express.Router(); 
+router.put('/:id/status', authSectorHead, updateIssueStatus);
+router.post('/:id/comment', authSectorHead, addComment);
+router.post('/report', authCitizen, reportIssue);
+router.get('/my', authCitizen, getMyIssues);
+router.get('/sector', authSectorHead, getSectorIssues);
+router.put('/:id/close', authSectorHead, forceCloseIssue);
+router.get('/export-issues', protect, exportIssues);
+router.get('/issue-status', protect, getCitizenIssues);
+export default router;
